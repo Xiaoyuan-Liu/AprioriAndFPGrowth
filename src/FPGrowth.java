@@ -14,6 +14,7 @@ public class FPGrowth {
     ArrayList<Itemset> L;
     ArrayList<Itemset> frequentSet;
     float Con;
+    long time;
     //private HashSet<String> set;
     //FPTreeNode FPTreeRoot;
     FPGrowth(int min,float con,int DSNo,String PathName)throws IOException {
@@ -155,7 +156,13 @@ public class FPGrowth {
         return res;
     }
     public ArrayList<Itemset> FPGrowthMining()throws IOException{
+        long startTime=System.nanoTime();
         frequentSet= FPMining(DB.getItems());
+        long endTime=System.nanoTime(); //获取结束时间
+        time=endTime-startTime;
+        System.out.println("FPGrowth频繁项集挖掘所用时间： "+(time)+"ns");
+        //System.out.println("FPGrowth频繁项集挖掘所用时间： "+(endTime-startTime)+"ns");
+
         for(int i = 0; i < frequentSet.size();i++){
             if(frequentSet.get(i).getSize()<2){
                 frequentSet.remove(i);
@@ -170,6 +177,7 @@ public class FPGrowth {
         for(int i = 0;i<L.size();i++){
             frequentSet.add(L.get(i));
         }
+
         ArrayList<ArrayList<Itemset>> confidenceSet = confidence.calculateConfidence(DB,frequentSet,Con);
         /*
         for(int i = 0; i < frequentSet.size();i++){
@@ -189,7 +197,9 @@ public class FPGrowth {
 
             }
         }*/
+
         saveCon(confidenceSet);
+        System.out.println("FPGrowth频繁项集挖掘所用时间： "+(time)+"ns");
     }
     public void saveCon(ArrayList<ArrayList<Itemset>> confidenceSet)throws IOException{
 

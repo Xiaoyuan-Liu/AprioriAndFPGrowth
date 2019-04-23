@@ -10,7 +10,7 @@ public class Apriori {
     private float Con;
     private HashSet<String> set;
     private DataBase DB;
-
+    long time;
     Apriori(int min_sup,float con, int DSNo,String PathName)throws IOException{
         this.min_sup=min_sup;
         Con=con;
@@ -131,11 +131,14 @@ public class Apriori {
         return res;
     }
     public void AprioriMining()throws IOException{
+        long startTime = System.nanoTime();
         ArrayList<Itemset>frequentSet=frequentSubset();
+        long endTime=System.nanoTime(); //获取结束时间
+        System.out.println("Apriori频繁项集挖掘时间： "+(endTime-startTime)+"ns");
         saveFrequentSet(frequentSet);
         ArrayList<ArrayList<Itemset>> confidenceSet = confidence.calculateConfidence(DB,frequentSet,Con);
         saveCon(confidenceSet);
-
+        System.out.println("程序运行时间： "+time+"ns");
     }
     public void saveCon(ArrayList<ArrayList<Itemset>> confidenceSet)throws IOException{
 
